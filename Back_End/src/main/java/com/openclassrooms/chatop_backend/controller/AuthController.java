@@ -2,9 +2,14 @@ package com.openclassrooms.chatop_backend.controller;
 
 import com.openclassrooms.chatop_backend.model.User;
 import com.openclassrooms.chatop_backend.service.UserService;
+import com.openclassrooms.chatop_backend.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -12,17 +17,24 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         Optional<User> userOpt = userService.getUserByEmail(loginRequest.getEmail());
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(loginRequest.getPassword())) {
-            // Ici tu peux générer un JWT ou retourner l'utilisateur selon le besoin du Front_End
-            return ResponseEntity.ok(userOpt.get());
+        if (userOpt.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), userOpt.get().getPassword())) {
+            String token = jwtUtil.generateToken(loginRequest.getEmail());
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", userOpt.get());
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(401).body("Invalid credentials");
     }
@@ -32,16 +44,26 @@ public class AuthController {
         if (userService.getUserByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User created = userService.saveUser(user);
+        created.setPassword(null);
         return ResponseEntity.ok(created);
     }
 
-    // @GetMapping("/me")
-    // public ResponseEntity<?> getCurrentUser(@RequestParam String email) {
-    //     // En production, récupérer l'email depuis le token JWT ou la session
-    //     // L'email (ou username) est dans principal.getName() si Spring Security est bien configuré
-    //     Optional<User> user = userService.getUserByEmail(email);
-    //     return user.map(ResponseEntity::ok)
-    //                .orElseGet(() -> ResponseEntity.status(404).body("User not found"));
-    // }    
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String email = jwtUtil.extractEmail(token);
+            Optional<User> user = userService.getUserByEmail(email);
+            if (user.isPresent()) {
+                User u = user.get();
+                u.setPassword(null);
+                return ResponseEntity.ok(u);
+            }
+        }
+        return ResponseEntity.status(401).body("Unauthorized");
+    }
 }
