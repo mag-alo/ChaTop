@@ -23,7 +23,7 @@ export class AuthService {
     return this.httpClient.post<AuthSuccess>(`${this.pathService}/login`, loginRequest);
   }
 
-  public me(): Observable<User> {
+  public me(): Observable<User> {  
     return this.httpClient.get<User>(`${this.pathService}/me`);
   }
 }

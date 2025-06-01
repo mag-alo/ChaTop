@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
@@ -19,9 +21,11 @@ public class User {
     private String password;
 
     @Column(name = "created_at")
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "owner")
