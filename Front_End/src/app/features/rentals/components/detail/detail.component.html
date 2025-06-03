@@ -15,7 +15,7 @@
         </mat-card-title>
         <mat-card-content>
             <div fxLayout="column" fxLayoutAlign="start center">
-                <img class="fit" [src]="rental.picture" alt="house picture">
+                <img class="fit" [src]="baseUrl.replace('/api/', '') + rental.picture" alt="house picture">
             </div>
             <div class="my2" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxLayout="center">

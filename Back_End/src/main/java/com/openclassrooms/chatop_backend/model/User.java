@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -18,6 +19,7 @@ public class User {
 
     private String name;
 
+    @JsonIgnore
     private String password;
 
     @Column(name = "created_at")
