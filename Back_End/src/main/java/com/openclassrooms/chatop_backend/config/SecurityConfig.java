@@ -29,6 +29,7 @@ public class SecurityConfig {
                     "/v3/api-docs/**",
                     "/uploads/**" // Autorise l'accès public aux images
                 ).permitAll()
+                .requestMatchers("/api/messages/**").authenticated()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
