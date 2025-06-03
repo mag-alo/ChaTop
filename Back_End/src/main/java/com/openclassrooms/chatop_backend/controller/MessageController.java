@@ -8,6 +8,9 @@ import com.openclassrooms.chatop_backend.security.JwtUtil;
 import com.openclassrooms.chatop_backend.service.MessageService;
 import com.openclassrooms.chatop_backend.service.RentalService;
 import com.openclassrooms.chatop_backend.service.UserService;
+
+import io.swagger.v3.oas.annotations.Hidden;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,11 +39,13 @@ public class MessageController {
         this.jwtUtil = jwtUtil;
     }
 
+    @Hidden
     @GetMapping
     public List<Message> getAllMessages() {
         return messageService.getAllMessages();
     }
 
+    @Hidden
     @GetMapping("/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable Integer id) {
         Optional<Message> messageOpt = messageService.getMessageById(id);
