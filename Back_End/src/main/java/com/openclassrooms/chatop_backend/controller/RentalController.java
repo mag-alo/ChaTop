@@ -2,7 +2,6 @@ package com.openclassrooms.chatop_backend.controller;
 
 import com.openclassrooms.chatop_backend.dto.RentalResponseDTO;
 import com.openclassrooms.chatop_backend.dto.RentalsListResponseDTO;
-import com.openclassrooms.chatop_backend.dto.RentalUpdateDTO;
 import com.openclassrooms.chatop_backend.model.Rental;
 import com.openclassrooms.chatop_backend.model.User;
 import com.openclassrooms.chatop_backend.security.JwtUtil;
