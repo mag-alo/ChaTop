@@ -8,6 +8,7 @@ import { MessageRequest } from '../../interfaces/api/messageRequest.interface';
 import { MessageResponse } from '../../interfaces/api/messageResponse.interface';
 import { MessagesService } from '../../services/messages.service';
 import { RentalsService } from '../../services/rentals.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail',
@@ -16,6 +17,7 @@ import { RentalsService } from '../../services/rentals.service';
 })
 export class DetailComponent implements OnInit {
 
+  public baseUrl = environment.baseUrl;
   public messageForm!: FormGroup;
   public rental: Rental | undefined;
 
