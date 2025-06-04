@@ -27,9 +27,8 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
-                    "/uploads/**" // Autorise l'accès public aux images
+                    "/uploads/**" // Allows public access to images
                 ).permitAll()
-                .requestMatchers("/api/messages/**").authenticated()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

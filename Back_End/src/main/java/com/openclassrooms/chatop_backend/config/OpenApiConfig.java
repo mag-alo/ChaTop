@@ -13,6 +13,6 @@ public class OpenApiConfig {
             .info(new Info()
                 .title("ChaTop API/Back-End")
                 .version("1.0")
-                .description("Documentation de l'API/Back-End ChaTop"));
+                .description("ChaTop API/Back-End Documentation"));
     }
 }

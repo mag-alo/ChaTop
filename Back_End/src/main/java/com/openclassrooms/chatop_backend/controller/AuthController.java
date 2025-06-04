@@ -27,17 +27,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
-        Optional<User> userOpt = userService.getUserByEmail(loginRequest.email);
-        System.out.println(loginRequest.email + " " + loginRequest.password);        
+        Optional<User> userOpt = userService.getUserByEmail(loginRequest.email);       
         if (userOpt.isPresent() && passwordEncoder.matches(loginRequest.password, userOpt.get().getPassword())) {
-            System.out.println("User authenticated successfully: " + userOpt.get().getEmail());
             String token = jwtUtil.generateToken(loginRequest.email);
             AuthResponseDTO response = new AuthResponseDTO();
             response.token = token;
             response.user = toUserResponseDTO(userOpt.get());
             return ResponseEntity.ok(response);
         }
-        System.out.println("User authenticated failed " + loginRequest.password);
         return ResponseEntity.status(401).body("Invalid credentials !");
     }
 
