@@ -3,10 +3,6 @@
 This project was generated with
   > Angular CLI version 14.1.0 | Java 17 | Spring Boot version 3.5.0 | Spring Data JPA | Spring Security | Spring Web | MySQL 8.0.33 | io.jsonwebtoken (JWT) version 0.11.5 | springdoc-openapi version 2.5.0 | JUnit | Maven
 
-## Back_End Documentation available on 
-
-http://localhost:9000/swagger-ui/index.html#/  
-
 ## Start the project
 
   ### MySql "chatop" BDD Setting
@@ -40,3 +36,7 @@ http://localhost:9000/swagger-ui/index.html#/
   In Spring Boot Dashboard, click
 
   > Run
+
+## Back_End Documentation then available on 
+
+http://localhost:9000/swagger-ui/index.html#/    
