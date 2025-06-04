@@ -15,23 +15,9 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
-    }
-
-    public Optional<Message> getMessageById(Integer id) {
-        return messageRepository.findById(id);
-    }
-
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
-    }
-
-    public void deleteMessage(Integer id) {
-        messageRepository.deleteById(id);
-    }
-
-    public MessageRepository getMessageRepository() {
-        return messageRepository;
-    }
+    public List<Message> getAllMessages() {return messageRepository.findAll();}
+    public Optional<Message> getMessageById(Integer id) {return messageRepository.findById(id);}
+    public Message saveMessage(Message message) {return messageRepository.save(message);}
+    public void deleteMessage(Integer id) {messageRepository.deleteById(id);}
+    public MessageRepository getMessageRepository() {return messageRepository;}
 }

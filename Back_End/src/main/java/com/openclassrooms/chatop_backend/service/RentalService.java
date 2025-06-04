@@ -13,29 +13,12 @@ import java.util.stream.Collectors;
 public class RentalService {
     private final RentalRepository rentalRepository;
 
-    public RentalService(RentalRepository rentalRepository) {
-        this.rentalRepository = rentalRepository;
-    }
-
-    public List<Rental> getAllRentals() {
-        return rentalRepository.findAll();
-    }
-
-    public Optional<Rental> getRentalById(Integer id) {
-        return rentalRepository.findById(id);
-    }
-
-    public Rental saveRental(Rental rental) {
-        return rentalRepository.save(rental);
-    }
-
-    public void deleteRental(Integer id) {
-        rentalRepository.deleteById(id);
-    }
-
-    public RentalRepository getRentalRepository() {
-        return rentalRepository;
-    }
+    public RentalService(RentalRepository rentalRepository) {this.rentalRepository = rentalRepository;}
+    public List<Rental> getAllRentals() {return rentalRepository.findAll();}
+    public Optional<Rental> getRentalById(Integer id) {return rentalRepository.findById(id);}
+    public Rental saveRental(Rental rental) {return rentalRepository.save(rental);}
+    public void deleteRental(Integer id) {rentalRepository.deleteById(id);}
+    public RentalRepository getRentalRepository() {return rentalRepository;}
 
     public RentalResponseDTO toDTO(Rental rental) {
         RentalResponseDTO dto = new RentalResponseDTO();

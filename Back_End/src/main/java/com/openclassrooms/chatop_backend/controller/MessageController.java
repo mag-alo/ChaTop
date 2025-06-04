@@ -4,7 +4,7 @@ import com.openclassrooms.chatop_backend.dto.MessageRequestDTO;
 import com.openclassrooms.chatop_backend.model.Message;
 import com.openclassrooms.chatop_backend.model.Rental;
 import com.openclassrooms.chatop_backend.model.User;
-import com.openclassrooms.chatop_backend.security.JwtUtil;
+import com.openclassrooms.chatop_backend.security.JwtHelper;
 import com.openclassrooms.chatop_backend.service.MessageService;
 import com.openclassrooms.chatop_backend.service.RentalService;
 import com.openclassrooms.chatop_backend.service.UserService;
@@ -25,18 +25,18 @@ public class MessageController {
     private final MessageService messageService;
     private final RentalService rentalService;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final JwtHelper jwtHelper;
 
     public MessageController(
             MessageService messageService,
             RentalService rentalService,
             UserService userService,
-            JwtUtil jwtUtil
+            JwtHelper jwtHelper
     ) {
         this.messageService = messageService;
         this.rentalService = rentalService;
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
+        this.jwtHelper = jwtHelper;
     }
 
     @Hidden
@@ -57,12 +57,8 @@ public class MessageController {
             @RequestBody MessageRequestDTO dto,
             @RequestHeader("Authorization") String authHeader
     ) {
-        // Authentification utilisateur
-        String email = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwt = authHeader.substring(7);
-            email = jwtUtil.extractEmail(jwt);
-        }
+        // Extract the email from the JWT token
+        String email = jwtHelper.extractEmailFromAuthHeader(authHeader);
         if (email == null) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
@@ -77,7 +73,7 @@ public class MessageController {
             return ResponseEntity.badRequest().body("Rental not found");
         }
 
-        // Création du message
+        // Message creation
         Message message = new Message();
         message.setMessage(dto.message);
         message.setRental(rentalOpt.get());

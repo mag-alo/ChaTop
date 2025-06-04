@@ -4,7 +4,7 @@ import com.openclassrooms.chatop_backend.dto.RentalResponseDTO;
 import com.openclassrooms.chatop_backend.dto.RentalsListResponseDTO;
 import com.openclassrooms.chatop_backend.model.Rental;
 import com.openclassrooms.chatop_backend.model.User;
-import com.openclassrooms.chatop_backend.security.JwtUtil;
+import com.openclassrooms.chatop_backend.security.JwtHelper;
 import com.openclassrooms.chatop_backend.service.RentalService;
 import com.openclassrooms.chatop_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,15 +26,15 @@ public class RentalController {
 
     private final RentalService rentalService;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final JwtHelper jwtHelper;
 
     @Value("${upload.dir:uploads}")
     private String uploadDir;
 
-    public RentalController(RentalService rentalService, UserService userService, JwtUtil jwtUtil) {
+    public RentalController(RentalService rentalService, UserService userService, JwtHelper jwtHelper) {
         this.rentalService = rentalService;
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
+        this.jwtHelper = jwtHelper;
     }
 
     @GetMapping
@@ -60,30 +60,26 @@ public class RentalController {
             @RequestParam("picture") MultipartFile picture,
             @RequestHeader("Authorization") String authHeader
     ) throws IOException {
-        // 1. Extraire l'email du token JWT
-        String email = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwt = authHeader.substring(7);
-            email = jwtUtil.extractEmail(jwt);
-        }
+        // 1. Extract the email from the JWT token
+        String email = jwtHelper.extractEmailFromAuthHeader(authHeader);
         if (email == null) {
             return ResponseEntity.status(401).build();
         }
 
-        // 2. Récupérer le user courant
+        // 2. Retrieve the current user
         Optional<User> ownerOpt = userService.getUserByEmail(email);
         if (ownerOpt.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        // 3. Sauvegarder l'image
+        // 3. Save the image
         String fileName = System.currentTimeMillis() + "_" + picture.getOriginalFilename();
         File dir = new File(System.getProperty("user.dir"), uploadDir);
         if (!dir.exists()) dir.mkdirs();
         File dest = new File(dir, fileName);
         picture.transferTo(dest);
 
-        // 4. Créer et sauvegarder le rental
+        // 4. Create and save the rental
         Rental rental = new Rental();
         rental.setName(name);
         rental.setSurface(surface);
@@ -96,7 +92,7 @@ public class RentalController {
 
         Rental created = rentalService.saveRental(rental);
 
-        // 5. Mapper la réponse DTO
+        // 5. Map the response DTO
         return ResponseEntity.ok(toDTO(created));
     }
 
@@ -115,17 +111,13 @@ public class RentalController {
         }
         Rental rental = rentalOpt.get();
 
-        // Vérifie que l'utilisateur courant est bien le propriétaire
-        String email = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwt = authHeader.substring(7);
-            email = jwtUtil.extractEmail(jwt);
-        }
+        // Check that the current user is the owner
+        String email = jwtHelper.extractEmailFromAuthHeader(authHeader);
         if (email == null || !rental.getOwner().getEmail().equals(email)) {
             return ResponseEntity.status(403).build();
         }
 
-        // Met à jour les champs
+        // Update the fields
         rental.setName(name);
         rental.setSurface(surface);
         rental.setPrice(price);
@@ -137,7 +129,7 @@ public class RentalController {
         return ResponseEntity.ok(toDTO(updated));
     }
 
-    // Méthode utilitaire pour mapper Rental -> RentalResponseDTO
+    // Utility method to map Rental -> RentalResponseDTO
     private RentalResponseDTO toDTO(Rental rental) {
         RentalResponseDTO dto = new RentalResponseDTO();
         dto.id = rental.getId();
