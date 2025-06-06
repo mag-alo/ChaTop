@@ -1,4 +1,4 @@
-# Chatop
+# ChaTop
 
 This project was generated with
   > Angular CLI version 14.1.0 | Java 17 | Spring Boot version 3.5.0 | Spring Data JPA | Spring Security | Spring Web | MySQL 8.0.33 | io.jsonwebtoken (JWT) version 0.11.5 | springdoc-openapi version 2.5.0 | JUnit | Maven
