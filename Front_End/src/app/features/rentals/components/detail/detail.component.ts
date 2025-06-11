@@ -19,7 +19,8 @@ export class DetailComponent implements OnInit {
 
   public baseUrl = environment.baseUrl;
   public messageForm!: FormGroup;
-  public rental: Rental | undefined;
+  public rental: Rental | null = null;
+  public currentUser = this.sessionService.user;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,8 +33,7 @@ export class DetailComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')!
-
+    const id = this.route.snapshot.paramMap.get('id')!;
     this.rentalsService
       .detail(id)
       .subscribe((rental: Rental) => this.rental = rental);
@@ -44,9 +44,10 @@ export class DetailComponent implements OnInit {
   }
 
   public sendMessage(): void {
+    if (!this.rental || !this.currentUser) return;
     const message = {
-      rental_id: this.rental!.id,
-      user_id: this.sessionService.user?.id,
+      rental_id: this.rental.id,
+      user_id: this.currentUser.id,
       message: this.messageForm.value.message
     } as MessageRequest;
 

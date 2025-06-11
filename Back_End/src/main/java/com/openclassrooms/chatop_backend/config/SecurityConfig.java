@@ -27,7 +27,8 @@ public class SecurityConfig {
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
-                    "/uploads/**" // Allows public access to images
+                    "/uploads/**", // Allows public access to images
+                    "/error"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

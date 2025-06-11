@@ -19,9 +19,15 @@ This project was generated with
 
   > git clone https://github.com/mag-alo/ChaTop.git
 
+  ### Launch Back_end 
+  
+  In a terminal, under Back_End repository root (cd Back_End), 
+
+  > ./mvnw spring-boot:run;
+
   ### Install and Launch Front_end
 
-  In a terminal, under Front_End repository root, 
+  In a terminal, under Front_End repository root (cd Front_End), 
   
   Install dependencies:
 
@@ -31,12 +37,6 @@ This project was generated with
 
   > npm run start;
 
-  ### Launch Back_end 
-  
-  In Spring Boot Dashboard, click
-
-  > Run
-
-## Back_End Documentation then available on 
+## Back_End Documentation will be so available on 
 
 http://localhost:9000/swagger-ui/index.html#/    

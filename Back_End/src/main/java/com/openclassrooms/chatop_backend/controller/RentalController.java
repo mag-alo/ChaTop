@@ -7,6 +7,7 @@ import com.openclassrooms.chatop_backend.model.User;
 import com.openclassrooms.chatop_backend.security.JwtHelper;
 import com.openclassrooms.chatop_backend.service.RentalService;
 import com.openclassrooms.chatop_backend.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rentals")
+@SecurityRequirement(name = "bearerAuth")
 public class RentalController {
 
     private final RentalService rentalService;

@@ -42,18 +42,21 @@
         </mat-card-content>
     </mat-card>
 
-    <mat-card class="mt2">
-        <mat-card-title>
-            <h2>Contact the owner</h2>
-        </mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" fxLayout="column">
-                <textarea matInput placeholder="Message for the owner" rows="6" formControlName="message"></textarea>
-                <div fxLayout="row" fxLayoutAlign="end center" class="mt2">
-                    <button mat-raised-button color="primary" type="submit"
-                        [disabled]="messageForm.invalid">Send</button>
-                </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
+    <!-- Show the message form only if it's not the user's own rental -->
+    <div *ngIf="currentUser && rental && rental.owner_id !== currentUser.id">
+        <mat-card class="mt2">
+            <mat-card-title>
+                <h2>Contact the owner</h2>
+            </mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" fxLayout="column">
+                    <textarea matInput placeholder="Message for the owner" rows="6" formControlName="message"></textarea>
+                    <div fxLayout="row" fxLayoutAlign="end center" class="mt2">
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="messageForm.invalid">Send</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>

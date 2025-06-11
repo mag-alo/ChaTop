@@ -10,6 +10,7 @@ import com.openclassrooms.chatop_backend.service.RentalService;
 import com.openclassrooms.chatop_backend.service.UserService;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/messages")
+@SecurityRequirement(name = "bearerAuth")
 public class MessageController {
 
     private final MessageService messageService;
