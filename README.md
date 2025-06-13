@@ -7,13 +7,26 @@ This project was generated with
 
   ### MySql "chatop" BDD Setting
 
-  . Create a MySQL database named "chatop"
+  . Create a MySQL database
 
   . Create a user with full privileges on this database
 
-  . Replace credentials of this chatop BDD user in "spring.datasource.username" and "spring.datasource.password" of Back_End/src/Ressources/application.properties file and save.
+  . Create three new Environnement Variables named as following replacing values "YOUR_XXX" with yours : 
+
+    DB_chatop_URL = "YOUR_DATABASE_NAME"
+    DB_chatop_Username = "YOUR_DATABASE_USER_NAME"
+    DB_chatop_Password = "YOUR_DATABASE_USER_PASSWORD"
 
   . Create the database schema by executing the SQL script available in `Front_End/ressources/sql/script.sql`
+
+  ### Token Setting 
+
+  In a terminal, generate a secrete value which will be used to generate token.
+  > echo -n "my-secret-value" | sha256sum
+
+  . Create a new Environnement Variable named as following replacing value "YOUR_XXX" with yours : 
+
+    API_CHATOP_TOKEN = "YOUR_JUST_GENERATED_SECRET_VALUE"
 
   ### Git clone
 
